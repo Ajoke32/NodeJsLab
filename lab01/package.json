@@ -1,0 +1,12 @@
+{
+  "name": "lab01",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "first lab",
+  "main": "app.js",
+  "author": "mykhailo_bekker",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}
