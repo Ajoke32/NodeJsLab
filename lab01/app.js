@@ -1,31 +1,60 @@
 import * as um from  "./user.js";
+import yargs from "yargs";
 
-const getArgValue = (str)=>{
-    return str.split('=')[1];
-};
+yargs.version('1.1.0');
 
-switch (process.argv[2]){
-    case 'add':{
-        const title = getArgValue(process.argv[3]);
-        const level = getArgValue(process.argv[4]);
-        um.addLang(title,level);
+yargs.command({
+    command:'add',
+    describe:'Adding new language',
+    builder:{
+        title:{
+            describe:'Language title',
+            demandOption:true,
+            type:'string'
+        },
+        level:{
+            describe:'Language level',
+            demandOption:true,
+            type:'string'
+        }
+    },
+    handler:(argv)=>{
+        um.addLang(argv.title,argv.level);
     }
-    break;
-    case 'remove':{
-        const title = getArgValue(process.argv[3]);
-        um.removeLang(title);
+});
+yargs.command({
+    command:'remove',
+    describe:'Removing language',
+    builder:{
+        title:{
+            describe:'Language title',
+            demandOption:true,
+            type:'string'
+        }
+    },
+    handler:(arg)=>{
+        um.removeLang(arg.title);
     }
-    break;
-    case 'read':{
-        const title = getArgValue(process.argv[3]);
-        console.log(um.getLang(title));
-    }
-    break;
-    case 'list':{
+});
+yargs.command({
+    command:'list',
+    describe:'List of languages',
+    handler:()=>{
         console.log(um.getList());
     }
-    break;
-    default:{
-        console.log("invalid command")}
-        break;
-}
+});
+yargs.command({
+    command:'read',
+    describe:'Get language',
+    builder:{
+        title:{
+            describe:'Language title',
+            demandOption:true,
+            type:'string'
+        }
+    },
+    handler:(arg)=>{
+        console.log(um.getLang(arg.title));
+    }
+});
+yargs.parse();
