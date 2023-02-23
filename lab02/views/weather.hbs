@@ -1,0 +1,67 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="/public/css/style.css">
+        <script src="/public/scripts/script.js" defer></script>
+        <title>Weather app</title>
+    </head>
+<body>
+{{>header}}
+<div class="app-container">
+    <div class="cities">
+        <a href="/weather/Kyiv">Kyiv</a>
+        <a href="/weather/Zhytomyr">Zhytomyr</a>
+        <a href="/weather/London">London</a>
+        <a href="/weather/Milan">Milan</a>
+        <a href="/weather/Hamburg">Hamburg</a>
+        <a href="/weather/Cork">Cork</a>
+        <a href="/weather/Liverpool">Liverpool</a>
+        <a href="/weather/Adelaide">Adelaide</a>
+        <a href="/weather/Bangkok">Bangkok</a>
+        <a href="/weather/Toronto">Toronto</a>
+    </div>
+    <div class="weather-wrapper">
+        <span>Weather in {{city}}</span>
+        <img src="http://openweathermap.org/img/wn/{{data.weather.[0].icon}}@2x.png" alt="">
+        <table>
+            <tr>
+                <td>Temperature</td>
+                <td>{{data.main.temp}}</td>
+            </tr>
+            <tr>
+                <td>Feels like</td>
+                <td>{{data.main.feels_like}}</td>
+            </tr>
+            <tr>
+                <td>Pressure</td>
+                <td>{{data.main.pressure}}</td>
+            </tr>
+            <tr>
+                <td>Humidity</td>
+                <td>{{data.main.humidity}}</td>
+            </tr>
+            <tr>
+                <td>Speed</td>
+                <td>{{data.wind.speed}}</td>
+            </tr>
+            <tr>
+                <td>Deg</td>
+                <td>{{data.wind.deg}}</td>
+            </tr>
+            <tr>
+                <td>Main</td>
+                <td>{{data.weather.[0].main}}</td>
+            </tr>
+            <tr>
+                <td>Desc</td>
+                <td>{{data.weather.[0].description}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
