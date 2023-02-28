@@ -1,4 +1,4 @@
-const key = '';
+const key = '4e37879f2c313d899483e26e9c38194d';
 
 function setCookie(name, value, options = {}) {
 

@@ -14,6 +14,7 @@ const getUser = () =>{
 const langIsExist = (lang,title) =>{
     return lang.find(i=>i.title===title);
 };
+
 export const addLang = (title,level)=> {
     const user = getUser();
     const languages = user.languages;

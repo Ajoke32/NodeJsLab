@@ -1,4 +1,5 @@
-import {lodash as loads} from "lodash/seq.js";
+import pkg from 'lodash/seq.js';
+const {lodash: loads} = pkg;
 
 
 console.log(loads.chunk(['a',1,'12','b'],1)); // розбиває масив на частини по заданому розміру
@@ -12,4 +13,3 @@ console.log(loads.intersection([2,4,'a','b'],['c',2,'a',9])); // поверта�
 console.log(loads.fromPairs([['name','Nick'],['age',19]])); // розбиває масиви на ключ/значення об'єкт
 
 console.log(loads.split('j,s,o,n',',')); // розбиває масив на рядки по сепаратору
-

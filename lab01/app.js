@@ -24,6 +24,7 @@ yargs.command({
 });
 yargs.command({
     command:'remove',
+    aliases:['rml'],
     describe:'Removing language',
     builder:{
         title:{
@@ -38,6 +39,7 @@ yargs.command({
 });
 yargs.command({
     command:'list',
+    aliases:['ls'],
     describe:'List of languages',
     handler:()=>{
         console.log(um.getList());
@@ -45,6 +47,7 @@ yargs.command({
 });
 yargs.command({
     command:'read',
+    aliases:['gl'],
     describe:'Get language',
     builder:{
         title:{

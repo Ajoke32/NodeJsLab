@@ -1,14 +1,13 @@
-
 const express = require('express');
 const  hbs = require('hbs');
 const app = express();
 const axios = require('axios');
 const expHBS = require('express-handlebars')
-const port = 5000;
-const key = '';
+const port = 3000;
+const key = '4e37879f2c313d899483e26e9c38194d';
 const path = require('path');
 const cookieParser = require("cookie-parser");
-const {response} = require("express");
+
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
 const h = expHBS.create({
@@ -53,16 +52,27 @@ app.get('/weather/:city',async (req,res)=>{
         const URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}&units=metric`;
         axios.get(URL).then(response=>{
             const data = response.data;
-            res.render('weather.hbs',{data,city});
+            res.render('weather',{data,city});
         });
     });
 
 });
 
 app.get('/home',(req,res)=>{
-    res.render('home.hbs');
+    res.render('home');
 });
 
+
+
+
+/*
+app.get('/err',(req,res)=>{
+   res.render('400');
+});
+
+app.get('/main',(req,res)=>{
+    res.render('main');
+});*/
 app.listen(port,()=>{
     console.log(`app listening on port ${port}`);
 });
