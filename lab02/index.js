@@ -4,7 +4,7 @@ const app = express();
 const axios = require('axios');
 const expHBS = require('express-handlebars')
 const port = 3000;
-const key = '4e37879f2c313d899483e26e9c38194d';
+const key = '';
 const path = require('path');
 const cookieParser = require("cookie-parser");
 
