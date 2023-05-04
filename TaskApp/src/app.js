@@ -11,7 +11,6 @@ const taskRoutes = require('./routes/taskRouter');
 
 
 mongoose.connect(url);
-
 const app = express();
 
 app.use(express.urlencoded({extended:true}));
@@ -21,13 +20,10 @@ app.use(taskRoutes);
 
 app.use(userRoutes);
 
-
-
-app.get("/",(req,res)=>{
-   res.send("Main page");
-});
-
-
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Server is listening on ${port} port`)
 })
+
+module.exports = server;
+
+

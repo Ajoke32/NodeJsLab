@@ -16,7 +16,7 @@ router.post("/tasks/add",auth,async (req,res)=>{
     task.populate("owner");
     try{
         await task.save();
-        res.status(200).json(task);
+        res.status(200).json({task:task});
     }catch (e){
         res.status(500).json({message:e.message});
     }
@@ -27,7 +27,7 @@ router.post("/tasks/add",auth,async (req,res)=>{
 router.get("/tasks",auth,async (req,res)=>{
     const tasks = await Task.find({owner:req.user.id});
 
-    res.send(tasks);
+    res.send({tasks:tasks});
 });
 //get all tasks
 
@@ -39,7 +39,7 @@ router.get("/task/:id",auth,async (req,res)=>{
         if(!task){
             return res.status(404).json({message:"task not found"})
         }
-        res.status(200).json(task);
+        res.status(200).json({task:task});
     }catch (e){
         res.status(400).json({message:e.message});
     }

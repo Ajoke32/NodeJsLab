@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Document</title>
+</head>
+<body>
+<section>
+    <div class="container-fluid">
+        <div class="row">
+            <div id="sidebar" class="col-4 vh-100 bg-info p-4">
+
+            </div>
+
+            <div id="chat">
+
+                <div id="messages">
+                </div>
+
+                <div id="compose">
+                    <form id="message-form" class="form-inline">
+                            <input type="text" id="msg" name="message" placeholder="Message" required autocomplete="off">
+                            <button>Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+
+<script id="message-template" type="text/html">
+    <div class="alert message {{bgClass}}">
+        <div>
+            <span class="message-name">{{username}}</span>
+            <span class="message-meta">{{createdAt}}</span>
+        </div>
+        <div>{{message}}</div>
+    </div>
+</script>
+
+<script id="sidebar-template" type="text/html">
+    <div class="alert alert-primary">
+        Room: <strong>{{room}}</strong><br>
+        Username: <strong>{{currentUser}}</strong>
+    </div>
+
+    <ul class="list-group">
+        <li class="list-group-item list-group-item-primary">Users in the chatroom</li>
+        {{#users}}
+        <li class="list-group-item">{{username}}</li>
+        {{/users}}
+    </ul>
+
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.1.0/mustache.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.1/qs.min.js"></script>
+
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+<script>
+    //elements
+    const $messageForm = document.querySelector("#message-form")
+    const $messageFormInput = $messageForm.querySelector("input");
+    const $messageFormButton = document.querySelector("button")
+    const $messages = document.querySelector("#messages")
+    const msg = document.getElementById('msg');
+    let prevP = null;
+    //Templates
+
+    const messageTemplate = document.querySelector("#message-template").innerHTML
+    const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML
+
+    // Options
+    const {username, room} = Qs.parse(location.search, {ignoreQueryPrefix: true})
+
+    const socket = io();
+
+    msg.oninput = ()=>{
+       socket.emit('typing',(message)=>{});
+    }
+    let flag = true;
+    socket.on('typing',(message)=>{
+        const p = document.createElement('p');
+        p.textContent=`user ${message.username} is typing....`;
+        const side = document.getElementById('sidebar');
+        if(prevP){
+            prevP.remove();
+        }
+        p.style.color= 'white';
+        p.style.padding='5px';
+        side.append(p);
+        prevP = p;
+        if(flag) {
+            flag = false;
+            setTimeout(() => {
+                p.textContent = "";
+            }, 1000);
+            flag=true;
+        }
+    })
+
+    socket.on('message', (message) => {
+        let bgClass = 'bg-warning text-white'
+        if (message.username === username.toLowerCase()) {
+            bgClass = 'bg-success text-white pull-right'
+        } else if (message.username === 'Admin') {
+            bgClass = 'bg-info text-white'
+        }
+
+        const html = Mustache.render(messageTemplate, {
+            username: message.username,
+            message: message.text,
+            bgClass: bgClass,
+            createdAt: moment(message.createdAt).format('h:mm a')
+        })
+        $messages.insertAdjacentHTML('beforeend', html)
+        const msgBlock = document.getElementById('messages');
+        msgBlock.scrollTop = msgBlock.scrollHeight;
+    })
+
+    socket.on('roomData', ({users}) => {
+        const html = Mustache.render(sidebarTemplate, {
+            room,
+            currentUser: username,
+            users
+        });
+        document.querySelector('#sidebar').innerHTML = html
+    })
+
+    $messageForm.addEventListener('submit', (e) => {
+        e.preventDefault()
+
+        $messageFormButton.setAttribute('disabled', 'disabled')
+
+        const message = e.target.elements.message.value
+
+        socket.emit('sendMessage', message, (error) => {
+            $messageFormButton.removeAttribute('disabled')
+            $messageFormInput.value = ''
+            $messageFormInput.focus()
+
+            if (error) {
+                return console.log(error)
+            }
+
+            console.log('Message delivered!')
+        })
+    })
+
+    socket.emit('join', {username, room}, (error) => {
+        if (error) {
+            alert(error)
+            location.href = '/'
+        }
+    })
+
+</script>
+</body>
+</html>

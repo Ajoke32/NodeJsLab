@@ -4,7 +4,8 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha tests/*.test.js",
+    "userTest": "mocha tests/user.test.js",
     "start": "node app.js",
     "dev": "nodemon -e js, json, env app"
   },
@@ -14,11 +15,17 @@
   "dependencies": {
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
+    "chai": "^4.3.7",
+    "chai-http": "^4.3.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
+    "mocha-logger": "^1.0.8",
     "mongoose": "^7.0.1",
     "nodemon": "^2.0.21",
     "validator": "^13.9.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0"
   }
 }

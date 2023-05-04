@@ -19,7 +19,7 @@ router.post("/users/logout",auth,async (req,res)=>{
             return token.token !== req.token;
         });
         await  req.user.save();
-        res.status(200).json({message:"OK"});
+        res.status(200).json({message:"logout success"});
     }catch (e){
         res.status(500).json({message:e.message});
     }
@@ -66,14 +66,13 @@ router.get("/users/:id",auth,async (req,res)=>{
 //get user by id
 
 //create new user
-router.post("/users/add", async (req, res) => {
+router.post("/users", async (req, res) => {
     const user = new User(req.body);
     try {
         await user.save();
-        res.status(200).json(user);
+        res.status(200).json({user:user,msg:"daon"});
     }catch (err) {
-        console.log(err);
-        res.status(400).json({message:err.message});
+        res.status(401).json({message:err.message});
     }
 });
 //create new user
@@ -120,7 +119,7 @@ router.patch('/users/:id',auth,async (req,res)=>{
 //update user by id
 
 //delete all users
-router.delete("/users",auth,async (req,res)=>{
+router.delete("/users",async (req,res)=>{
     try {
         const user = await User.deleteMany();
         res.status(200).json({message:"successfully"})
@@ -134,12 +133,11 @@ router.post("/users/login",async (req,res)=>{
  try {
      const user = await User.findOneByCredentials(req.body.email,req.body.password);
      const token = await user.generateAuthToken();
-     res.status(200).json({user,token});
+     res.status(200).json({message:"success",token:token});
  }catch (e){
    res.status(400).json({message:e.message});
  }
 });
-
 
 
 module.exports = router;

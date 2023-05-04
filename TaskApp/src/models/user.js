@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
         trim: true,
         validate(value) {
             if (value < 0) {
-                throw new Error("age must be a positive number")
+                throw new Error("must be a positive number")
             }
         }
     },
@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
       unique:true,
         validate(value){
           if(!validator.isEmail(value)){
-              throw new Error("Email is incorrect");
+              throw new Error("incorrect format");
           }
         }
     },
@@ -37,10 +37,10 @@ const userSchema = new mongoose.Schema({
         trim:true,
         validate(value){
             if(value.length<7){
-                throw new Error("password min length is 7")
+                throw new Error(" min length is 7")
             }
             if(value.includes("password")){
-                throw  new Error("you password is weak")
+                throw  new Error("password is weak")
             }
         }
     },
@@ -66,7 +66,7 @@ userSchema.methods.generateAuthToken = async function(){
     const user = this;
 
     const token = jwt.sign({ _id: user._id.toString() },
-        'secaisuciiksf');
+        'secretprtkeys');
 
     user.tokens = user.tokens.concat({token});
 
@@ -76,7 +76,6 @@ userSchema.methods.generateAuthToken = async function(){
 }
 userSchema.methods.toJSON = function(){
     const userObject = this.toObject();
-    delete userObject.password;
     delete  userObject.tokens;
     return userObject;
 }
